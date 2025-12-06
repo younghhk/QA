@@ -14,23 +14,32 @@ This repository introduces a quantile-adaptive, model-free framework for nonline
 
 * Censored outcomes: extends naturally to right-censored survival data while retaining the same screening principle.​
 
-### Example: uncensored data
+## Example usage
 
 ```
 source("QA.r")
-
-## Generate data
+## ------------- Uncensored example ----------------------
 dat    <- simul_dat_example(N = 200, p = 1000, seed = 100)
 x      <- dat$x
 y      <- dat$y
 active <- dat$active
 
-## Compute QaSIS statistics at tau = 0.5
 out <- QaSIS(y = y, x = x, tau = 0.5)
-
-## Ranks of the true active variables (should be near the top)
-rank(-out)[active]
+rank(-out)[active]   # ranks of true active variables
 [1] 2 1 3 4
+
+## -------------- Survival example ------------------------
+out_surv <- QaSIS.surv(
+  x       = x,
+  time    = time,
+  delta   = delta,
+  tau     = 0.5,
+  w_trunc = 20,
+  df_bs   = 3
+)
+
+rank(-out_surv)[active]   # ranks of true active variables
+[1] 4 1 2 3
 ```
 
 
