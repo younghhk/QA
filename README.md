@@ -33,25 +33,6 @@ rank(-out)[active]
 [1] 2 1 3 4
 ```
 
-### Example (right-censored)
-
-```
-# ----------------------------------------------------------------------
-# Example usage (censored)
-# ----------------------------------------------------------------------
-source(Qasissv.r)
-## Generate data
-dat    <- simul_dat_example(N = 200, p = 1000, seed = 100)
-x      <- dat$x
-y      <- dat$y
-active <- dat$active
-
-## Compute QaSIS statistics at tau = 0.5
-out <- QaSIS(y = y, x = x, tau = 0.5)
-
-## Ranks of the true active variables (should be near the top)
-rank(-out)[active]
-```
 
 ## Reference
 He X, Wang L, Hong HG. [Quantile-adaptive model-free variable screening for high-dimensional heterogeneous data.](https://projecteuclid.org/journals/annals-of-statistics/volume-41/issue-1/Quantile-adaptive-model-free-variable-screening-for-high-dimensional-heterogeneous/10.1214/13-AOS1087.pdf) Annals of Statistics. 2013;41(1):342–369.​
