@@ -129,3 +129,47 @@ QaSIS_surv <- function(x, time, delta, tau = 0.5) {
   return(fit_stat)
 }
 
+# ----------------------------------------------------------------------
+# Example usage (uncensored)
+# ----------------------------------------------------------------------
+
+simul_dat_example <- function(N, p, seed = 100) {
+  if (!is.null(seed)) set.seed(seed)
+  
+  active <- 1:4
+  
+  # AR(1)-type covariance with rho = 0.8
+  Sigma1 <- diag(p)
+  for (i in seq_len(p)) {
+    for (j in seq_len(p)) {
+      if (i < j) {
+        Sigma1[i, j] <- 0.8^abs(i - j)
+        Sigma1[j, i] <- Sigma1[i, j]
+      }
+    }
+  }
+  
+  # Nonlinear functions as in the AoS paper
+  g1 <- function(x) (x)
+  g2 <- function(x) ((2 * x - 1)^2)
+  g3 <- function(x) (sin(2 * pi * x) / (2 - sin(2 * pi * x)))
+  g4 <- function(x) (
+    0.1 * sin(2 * pi * x) +
+      0.2 * cos(2 * pi * x) +
+      0.3 * sin(2 * pi * x)^2 +
+      0.4 * cos(2 * pi * x)^3 +
+      0.5 * sin(2 * pi * x)^3
+  )
+  
+  X <- mvrnorm(N, mu = rep(0, p), Sigma = Sigma1)
+  eps <- rnorm(N, mean = 0, sd = sqrt(1.74))
+  
+  Y <- 5 * g1(X[, 1]) +
+    3 * g2(X[, 2]) +
+    4 * g3(X[, 3]) +
+    6 * g4(X[, 4]) +
+    eps
+  
+  list(x = X, y = Y, active = active)
+}
+
